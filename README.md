@@ -5,8 +5,11 @@ a java library to make Database connection in Java more easily (I know it sounds
 it's a eclipse Projekt import it into eclipse and create a *.jar
 
 ## how to use
-codeexample:
-`	public static void main(String[] args) {
+codeexample
+
+```java
+
+	public static void main(String[] args) {
 		boolean ret = false;
 		// example for SQLite
 		DBSQLiteJDBC dbsqlite = new DBSQLiteJDBC("C:\\Path\\To\\SQLite\\Database\\testSQLite.db");
@@ -32,4 +35,4 @@ codeexample:
 			dbmysql.closeConnection();
 		}
 	}
-`
+```
