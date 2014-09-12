@@ -22,7 +22,7 @@ public class Test {
 		dbmysql.setPasswort("mysql");
 		// Variante 2
 		dbmysql = new DBMySQL("localhost:3306/test", "root", "");
-		
+
 		ret = dbmysql.createConnection();
 		if (ret) {
 			System.out.println(ret);

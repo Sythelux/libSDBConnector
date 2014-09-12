@@ -21,7 +21,8 @@ public class DBMySQL extends DB {
 	}
 
 	/**
-	 * Konstruktor der eine Zeichenkette mit Dateinamen der Datenbank annimmt Bsp.: localhost:3306/meine_datenbank
+	 * Konstruktor der eine Zeichenkette mit Dateinamen der Datenbank annimmt
+	 * Bsp.: localhost:3306/meine_datenbank
 	 * 
 	 * @param dbName
 	 *            Datenbankbezeichnung.

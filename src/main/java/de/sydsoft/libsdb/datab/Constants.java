@@ -12,7 +12,7 @@ public abstract class Constants {
 	/** Datenbankname */
 	public static String DBNAME = "";
 	/** Datenbanktyp z.B.: MySQL,Access */
-	public static DBTyp DBTYP;
+	public static DBType DBTYP;
 	/** Accountname */
 	public static String DBKONTO = "";
 	/** Passwort */

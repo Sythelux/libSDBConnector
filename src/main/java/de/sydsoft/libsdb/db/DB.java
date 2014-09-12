@@ -11,36 +11,37 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
-import org.sqlite.SQLite;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 
  * @author Rikd
  */
-public abstract class DB implements KeyWords {
+public abstract class DB {
+	private static Logger		Log			= Logger.getLogger(DB.class.getSimpleName());
 
 	/** DatenbankName */
-	protected String dbName;
+	protected String			dbName;
 	/** anfang der VerbindungsURL z.B.:"jdbc:mysql:"(bei MySQL) */
-	protected String connUrl;
+	protected String			connUrl;
 	/** ende der VerbindungsURL z.B.:";DriverID=22}"(bei Access) */
-	protected String connUrlClose;
+	protected String			connUrlClose;
 	/** Verbindung zur Datenbank */
-	protected Connection connect;
+	protected Connection		connect;
 	/** Beinhaltet die SQL abfrage */
-	protected Statement command;
+	protected Statement			command;
 	/** Beinhaltet die Rückgabe der Daten */
-	protected ResultSet data;
+	protected ResultSet			data;
 	/** beinhaltet die Metadaten der zurückgegebenen Daten */
-	protected ResultSetMetaData resm;
+	protected ResultSetMetaData	resm;
 	/**
 	 * Properties datei die Bei datenbanken mitgegeben wird die kein namen und
 	 * passwort benötigen in ihr kann z.B.: der "charSet" stehen mit "UTF-8"
 	 */
-	protected Properties connProps = new Properties();
+	protected Properties		connProps	= new Properties();
 	/** zugriffstreiber zum Initialisieren standartmäßig bei jeder Tochterklasse */
-	protected String driver;
+	protected String			driver;
 
 	/**
 	 * 
@@ -71,8 +72,7 @@ public abstract class DB implements KeyWords {
 	}
 
 	/** Standardkonstruktor */
-	public DB() {
-	}
+	public DB() {}
 
 	/**
 	 * baut eine Verbindung zu Datenbank auf
@@ -91,8 +91,7 @@ public abstract class DB implements KeyWords {
 			isconnected = true;
 			System.out.println("Connection opened. Duration: " + (System.currentTimeMillis() - startTime) + " ms");
 		} catch (Exception e) {
-//			System.err.println("couldn't open Database: " + connUrl + dbName + connUrlClose + " Error: " + e.getMessage());
-			e.printStackTrace();
+			Log.log(Level.SEVERE, "couldn't open Database: " + connUrl + dbName + connUrlClose, e);
 		}
 		return isconnected;
 	}
@@ -102,23 +101,22 @@ public abstract class DB implements KeyWords {
 			command = connect.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Log.log(Level.SEVERE, e.getSQLState(), e);
 			return false;
-		}		
+		}
 	}
-	
+
 	/**
 	 * schließt die Verbindung zur Datenbank, wenn eine Verbindung besteht.
 	 * Ansonsten passiert nichts.
 	 */
 	public void closeConnection() {
-		if (connect == null) {
-			return; // Verbindung wurde nicht erzeugt
+		if (connect == null) { return; // Verbindung wurde nicht erzeugt
 		}
 		try {
 			connect.close();
 		} catch (SQLException e) {
-			System.err.println("couldn't close Database." + " Error: " + e.getMessage());
+			Log.log(Level.SEVERE, "couldn't close Database.", e);
 		}
 	}
 
@@ -135,7 +133,7 @@ public abstract class DB implements KeyWords {
 		try {
 			data = command.executeQuery(sql);
 		} catch (SQLException e) {
-			System.err.println("Error: " + sql + "\r\n" + e.getMessage());
+			Log.log(Level.SEVERE, "couldn't execute command:" + sql, e);
 		}
 		// System.out.println("sqlQuery duration: "+(System.currentTimeMillis()
 		// - startTime));
@@ -154,7 +152,7 @@ public abstract class DB implements KeyWords {
 		try {
 			return command.execute(sql);
 		} catch (SQLException e) {
-			System.err.println("Error: " + sql + "\r\n" + e.getMessage());
+			Log.log(Level.SEVERE, "couldn't execute command:" + sql, e);
 			return false;
 		}
 	}
@@ -165,13 +163,11 @@ public abstract class DB implements KeyWords {
 	 * @return Metadaten der Letzten SQL-Abfrage, wenn vorhanden ansonsten null.
 	 */
 	public ResultSetMetaData dbInfo() {
-		if (data == null) {
-			return null;
-		}
+		if (data == null) { return null; }
 		try {
 			resm = data.getMetaData();
 		} catch (SQLException e) {
-			System.err.println("Error: " + e.getMessage());
+			Log.log(Level.SEVERE, "couldn't get MetaData", e);
 		}
 		return resm;
 	}
@@ -183,7 +179,7 @@ public abstract class DB implements KeyWords {
 		try {
 			data.updateRow();
 		} catch (SQLException e) {
-			System.err.println("Error: " + e.getMessage());
+			Log.log(Level.SEVERE, "couldn't update Row", e);
 		}
 	}
 

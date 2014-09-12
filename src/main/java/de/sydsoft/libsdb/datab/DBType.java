@@ -8,7 +8,7 @@ package de.sydsoft.libsdb.datab;
  * 
  * @author Sythelux Rikd
  */
-public enum DBTyp {
+public enum DBType {
 
 	MYSQL("mySql"), MSSQL("msSql"), ACCESS("Access"), SQLITE("SQLite");
 
@@ -18,7 +18,7 @@ public enum DBTyp {
 	 * 
 	 * @param value
 	 */
-	private DBTyp(String value) {
+	private DBType(String value) {
 		this.value = value;
 	}
 

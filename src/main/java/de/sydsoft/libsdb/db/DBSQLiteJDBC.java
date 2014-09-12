@@ -1,6 +1,5 @@
 package de.sydsoft.libsdb.db;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -33,18 +32,18 @@ public class DBSQLiteJDBC extends DB {
 		super(dbName, props);
 		init();
 	}
-	
+
 	@Override
-	protected boolean createCommand(){
+	protected boolean createCommand() {
 		try {
 			command = connect.createStatement();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
-		}		
+		}
 	}
-	
+
 	private void init() {
 		connUrl = "jdbc:sqlite:";
 		connUrlClose = "";

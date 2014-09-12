@@ -7,25 +7,25 @@ package de.sydsoft.libsdb.datab;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JTable;
-
-import com.sfl.Message;
 
 import de.sydsoft.libsdb.db.DB;
 import de.sydsoft.libsdb.db.DBAccess;
 import de.sydsoft.libsdb.db.DBMSSQL;
 import de.sydsoft.libsdb.db.DBMySQL;
 import de.sydsoft.libsdb.db.DBSQLiteJDBC;
-import de.sydsoft.libsdb.db.KeyWords;
 
 /**
  * 
  * @author Sythelux Rikd
  */
-public class DataBuilder implements KeyWords {
-
+public class DataBuilder {
+	private static Logger Log = Logger.getLogger(DataBuilder.class.getSimpleName());
+	
 	/** Object einer DB */
 	protected DB db;
 	/** tabelle mit der hauptsächlich gearbeitet wird */
@@ -50,7 +50,7 @@ public class DataBuilder implements KeyWords {
 			this.db = new DBSQLiteJDBC(Constants.DBNAME);
 			break;
 		}
-		Message.dbgMsg("eine Instanz von " + this.db.getClass() + " wurde erstellt.");
+		Log.config("an Instance of " + this.db.getClass() + " was created.");
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class DataBuilder implements KeyWords {
 			SQLCom = SQLCom.replace("Format", "Date_Format");
 			SQLCom = SQLCom.replace("\'yyyy\'", "\'%Y\'");
 		}
-		Message.dbgMsg("aktuelles Kommando: " + SQLCom);
+		Log.config("current Command: " + SQLCom);
 		ResultSet data;
 		String[] simpleData = { "Fehler" };
 		ArrayList<String> hlp = new ArrayList<String>();
@@ -85,7 +85,7 @@ public class DataBuilder implements KeyWords {
 				System.out.println("Abfragedauer: " + (System.currentTimeMillis() - startTime));
 			}
 		} catch (SQLException ex) {
-			Message.errMsg(ex.getMessage());
+			Log.log(Level.SEVERE, ex.getSQLState(), ex);
 		}
 
 		simpleData = hlp.toArray(simpleData);
@@ -126,7 +126,7 @@ public class DataBuilder implements KeyWords {
 	 */
 	public boolean mysqlActive() {
 		boolean act = false;
-		if (Constants.DBTYP == DBTyp.MYSQL) {
+		if (Constants.DBTYP == DBType.MYSQL) {
 			act = true;
 		}
 		return act;
@@ -139,7 +139,7 @@ public class DataBuilder implements KeyWords {
 	 */
 	public boolean mssqlActive() {
 		boolean act = false;
-		if (Constants.DBTYP == DBTyp.MSSQL) {
+		if (Constants.DBTYP == DBType.MSSQL) {
 			act = true;
 		}
 		return act;
@@ -152,7 +152,7 @@ public class DataBuilder implements KeyWords {
 	 */
 	public boolean SQLiteActive() {
 		boolean act = false;
-		if (Constants.DBTYP == DBTyp.SQLITE) {
+		if (Constants.DBTYP == DBType.SQLITE) {
 			act = true;
 		}
 		return act;
@@ -165,7 +165,7 @@ public class DataBuilder implements KeyWords {
 	 */
 	public boolean accessActive() {
 		boolean act = false;
-		if (Constants.DBTYP == DBTyp.ACCESS) {
+		if (Constants.DBTYP == DBType.ACCESS) {
 			act = true;
 		}
 		return act;
